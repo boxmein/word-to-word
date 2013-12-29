@@ -1,0 +1,27 @@
+{
+	// Bluntly partially stolen from https://github.com/panicsteve/cloud-to-butt
+	"manifest_version": 2,
+	"name": "Word Replacer",
+	"description": "Replaces words in webpages. Similar to cloud-to-butt except for everything-to-everything.",
+	"version": "0.1",
+
+	// To allow user to modify list
+	"browser_action": {
+		"default_icon": "button/icon.png",
+		"default_popup": "button/popup.html",
+		"default_title": "Word Replacer"
+	},
+
+	// To modify pages
+	// ...we need to modify every page
+	"content_scripts": [{
+		"matches": ["*://*/*"],
+		"js": ["content_script/script.js"],
+		"run_at": "document_end"
+	}],
+
+	// To keep track of objects
+	"background": {
+		"scripts": ["background.js"]
+	}
+}

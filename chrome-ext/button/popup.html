@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Popup</title>
+	<style>
+		/* http://colorschemedesigner.com/#3C11Tw0w0w0w0 */
+		* { box-sizing: border-box; }
+
+		body {
+			font-family: 'Voces', sans-serif;
+			font-size: 14px;
+
+			color: #333333;
+			background-color: #EFEFEF;
+
+			margin: 0;
+			padding: 0;
+
+			min-width: 200px;
+
+			padding: 10px;
+		}
+
+		h2 {
+			margin-bottom: 0px;
+			font-size: 1.3em;
+		}
+
+		input[type="text"] {
+			width: 70%;
+			height: 25px;
+			padding: 5px;
+		}
+
+		.button { 
+			color: #787878; 
+			background-color: none;
+			cursor: pointer;
+			font-style: italic;
+			text-decoration: underline;
+			font-size: 0.8em;
+		}
+
+		#list {
+			min-height: 50px;
+			font-size: 0.85em;
+		}
+		#list .line:hover {
+			color: #FF0000;
+			cursor: default;
+		}
+		#list .line:before {
+			content: '- ';
+		}
+
+		#form {
+			padding: 3px;
+		}
+
+	</style>
+	<!--<link href='http://fonts.googleapis.com/css?family=News+Cycle:400,700' rel='stylesheet' type='text/css'>-->
+</head>
+<body>
+	<h2>Word Replacer</h2>
+	<div id="list">
+		<em>Click a list item to delete it<br><br></em>
+	</div>
+
+	<div class="button" id="add">Add replacement</div>
+
+	<form id="form">
+		<input autofocus tabindex="1" type="text" id="from" placeholder="Look for ..." />
+		<input tabindex="2" type="text" id="to" placeholder="Replace with ..." />
+		<input type="submit" value="Add" tabindex="3" id="submit" />
+		<div class="button" id="hide">Cancel</div>
+	</form>
+
+	<script src="jquery-2.0.3.min.js"></script>
+	<script src="popup.js"></script>
+
+</body>
+</html>
