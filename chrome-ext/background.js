@@ -3,8 +3,10 @@
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 
-		console.log('Received message from somewhere');
-		console.log(request, sender);
+		if (sender.tab) 
+			console.log('got a message from the content script');
+		else
+			console.log('got a message from the button');
 
 		var r = localStorage.replacements;
 		try {
@@ -14,20 +16,23 @@ chrome.runtime.onMessage.addListener(
 
 			r = JSON.parse(r); 
 
-			// get the localStorage data
-			if (request.get == 1) {
-				console.log('woo! someone wants our data! let\'s give it to them');
-				console.log(r);
+			// if we should notify the content script of new changes
+			if (request.notify) {
+				chrome.runtime.sendMessage({
+					update: 1, 
+					replacements: request.data
+				});
+			}
 
+			// respond with our persistently stored data
+			if (request.get == 1) {
 				sendResponse({
 					replacements: r
 				});
 			}
 
-			// set the localStorage data
+			// set the persistently stored data to this new value.
 			else if (request.set == 1) {
-				console.log('woo! got new data! setting it as my own');
-
 				localStorage.replacements = JSON.stringify(request.data);
 				sendResponse({err: null});
 			}
