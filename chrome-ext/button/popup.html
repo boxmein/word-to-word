@@ -1,14 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html ng-app="app" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Popup</title>
 	<style>
 		/* http://colorschemedesigner.com/#3C11Tw0w0w0w0 */
 		* { box-sizing: border-box; }
+		
+		[ng-cloak],[ng:cloak],[x-ng-cloak],[data-ng-cloak]{display:none;}
 
 		body {
-			font-family: 'Voces', sans-serif;
+			font-family: sans-serif;
 			font-size: 14px;
 
 			color: #333333;
@@ -17,67 +19,183 @@
 			margin: 0;
 			padding: 0;
 
-			min-width: 200px;
+			width: 300px;
+			height: 250px;
 
 			padding: 10px;
+
+			overflow-x: hidden;
+
+			-webkit-user-select: none;
+			user-select: none;
 		}
 
 		h2 {
-			margin-bottom: 0px;
-			font-size: 1.3em;
+			text-align: center;
+			margin: 0 0 .3em 0;
+			font-size: 1.5em;
 		}
 
-		input[type="text"] {
-			width: 70%;
-			height: 25px;
+		button { 
+			display: block;
+			width: 98%;
+
+			border: 1px solid #202020;
+			background-color: #202020;
+			color: white;
+
+			margin: 5px 3px;
 			padding: 5px;
+
+			-webkit-appearance: none;
+			appearance: none;
+
+			-webkit-transition: background-color 0.1s ease;
+			transition: background-color 0.1s ease;
 		}
 
-		.button { 
-			color: #787878; 
-			background-color: none;
-			cursor: pointer;
-			font-style: italic;
-			text-decoration: underline;
-			font-size: 0.8em;
+		button:hover {
+			background-color: #303030;
 		}
 
-		#list {
-			min-height: 50px;
-			font-size: 0.85em;
+		button.invert {
+			color: #202020;
+			background-color: #EFEFEF;
+			border: 1px solid #EFEFEF;
 		}
-		#list .line:hover {
-			color: #FF0000;
-			cursor: default;
+
+		button.invert:hover {
+			background-color: #FDFDFD;
 		}
-		#list .line:before {
-			content: '- ';
+			
+		fieldset {
+			border: none;
+			position: relative;
+			margin: 0; padding: 0;
+			clear: both;
+		}
+
+		fieldset input {
+			float: left;
+			padding: 5px;
+			width: 48%;
+			margin: 1%;
+		}
+
+		fieldset input:last-child {
+			float: right;
 		}
 
 		#form {
 			padding: 3px;
 		}
 
+		#list {
+			width: 98%;
+			list-style-type: none;
+			padding: 3px;
+			margin: 3px;
+		}
+
+		.item {
+			padding: 7px;
+			margin: 3px 0;
+			background-color: #DFDFDF;
+			-webkit-transition: background-color 0.1s ease;
+			transition: background-color 0.1s ease;
+		}
+
+		.item span {
+			display: inline-block;
+			margin: 0;
+			padding: 0;
+			width: 30%;
+		}
+
+		.item span.arrow {
+			width: 5%;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		.item:hover {
+			background-color: #FFFFFF;
+		}
+
+		.item.destroying {
+			background-color: #FF6666;
+			-webkit-transition: background-color 2s ease-in;
+			transition: background-color 2s ease-in;
+		}
+
+		::-webkit-scrollbar {
+			width: 5px;
+			height: 5px;
+			background-color: #EFEFEF;
+		}
+
+		::-webkit-scrollbar-thumb {
+			color: #000;
+			background-color: #000;
+		}
+
+		p {
+			margin: 3px;
+			padding: 3px;
+			font-size: 0.8em;
+		}
 	</style>
-	<!--<link href='http://fonts.googleapis.com/css?family=News+Cycle:400,700' rel='stylesheet' type='text/css'>-->
 </head>
 <body>
 	<h2>Word Replacer</h2>
-	<div id="list">
-		<em>Click a list item to delete it<br><br></em>
+	
+	<p>Long press the replacements to remove them.</p>
+
+	<div ng-controller="Ctrl">
+		<ul id="list">
+			<li class="item" 
+					ng-init="rmify = removify($index)"
+			    ng-repeat="item in items track by $index"
+			    ng-mousedown="rmify.turnOn()"
+			    ng-mouseup="rmify.turnOff()">
+				<span class="from">{{item.from}}</span>
+				<span class="arrow">&rarr;</span>
+				<span class="to">{{item.to}}</span>
+			</li>
+		</ul>
+
+		<form id="form" ng-submit="addItemToList()">
+			
+			<fieldset>
+
+				<input required
+				       autofocus 
+				       tabindex="1" 
+				       type="text" 
+				       id="from" 
+				       ng-model="thing.from"
+				       placeholder="Look for ..." />
+	
+				<input tabindex="2" 
+				       type="text" 
+				       id="to" 
+				       ng-model="thing.to"
+				       placeholder="Replace with ..." />
+			</fieldset>
+
+			<button type="submit" 
+			       tabindex="3" 
+			       id="submit">
+			  Submit</button>
+			<button id="cancel" 
+							class="invert"
+							ng-click="thing = {}"
+						  tabindex="4">
+				Clear</button>
+		</form>		
 	</div>
 
-	<div class="button" id="add">Add replacement</div>
-
-	<form id="form">
-		<input autofocus tabindex="1" type="text" id="from" placeholder="Look for ..." />
-		<input tabindex="2" type="text" id="to" placeholder="Replace with ..." />
-		<input type="submit" value="Add" tabindex="3" id="submit" />
-		<div class="button" id="hide">Cancel</div>
-	</form>
-
-	<script src="jquery-2.0.3.min.js"></script>
+	<script src="./angular.min.js"></script>
 	<script src="popup.js"></script>
-
 </body>
 </html>
