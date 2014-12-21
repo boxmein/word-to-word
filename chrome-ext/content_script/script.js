@@ -39,11 +39,29 @@ function handleText(textNode, replacements)
 	textNode.nodeValue = v;
 }
 
-chrome.runtime.sendMessage({get: 1}, function(response) {
-	if (response.replacements) {
-		walk(document.body, handleText, response.replacements);
-	}
-	else if (response.err) {
-		console.log(response.err);
-	}
-});
+(function() {
+	'use strict';
+
+	var storedReplacements = null;
+
+	chrome.runtime.sendMessage({get: 1}, function(response) {
+		if (response.replacements) {
+			storedReplacements = response.replacements;
+			walk(document.body, handleText, storedReplacements);
+		}
+		else if (response.err) {
+			console.error(response.err);
+		}
+	});
+
+	chrome.runtime.onMessage.addListener(function(req, snd, respond) {
+		console.log('holy shit i got a message', req, snd, respond);
+		if (req.update == 1) {
+			// gotta re-walk!
+			storedReplacements = req.replacements;
+			walk(document.body, handleText, req.replacements);
+		}
+	});
+
+})();
+
