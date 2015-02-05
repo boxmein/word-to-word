@@ -1,5 +1,7 @@
 # word-to-word
 
+![inspiration #2](http://imgs.xkcd.com/comics/s_keyboard_leopard.png)
+
 Goes across all your fancy little web pages and changes every occurrence of 
 [specified word/phrase/string 1] to [speficied word/phrase/string 2]. Like the 
 great and powerful cloud-to-butt extension, only it doesn't only change clouds 
