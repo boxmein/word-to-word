@@ -1,6 +1,6 @@
 # word-to-word
 
-![inspiration #2](http://imgs.xkcd.com/comics/s_keyboard_leopard.png)
+![shh this is what i meant](http://imgs.xkcd.com/comics/substitutions.png)
 
 Goes across all your fancy little web pages and changes every occurrence of 
 [specified word/phrase/string 1] to [speficied word/phrase/string 2]. Like the 
